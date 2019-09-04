@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class Login extends AppCompatActivity {
+public class MainScreen extends AppCompatActivity {
 
     private static final int RC_SIGN_IN =7 ;
     GoogleSignInClient mGoogleSignInClient;
@@ -33,25 +33,26 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleApiClient googleApiClient;
     @SuppressLint("WrongViewCast")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_mainscreen);
 
-        final Button loginBtn = (Button) findViewById(R.id.loginbtn);
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        final Button loginbtn = (Button) findViewById(R.id.loginbtn);
+        loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent((Login.this), Calendar.class);
+                Intent myIntent = new Intent((MainScreen.this), MainActivity.class);
                 startActivityForResult(myIntent,0);
             }
         });
 
-        final Button signup = (Button) findViewById(R.id.signupbtn);
-        signup.setOnClickListener(new View.OnClickListener() {
+        final Button signupbtn = (Button) findViewById(R.id.signupbtn);
+        signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent((Login.this), SignUp.class);
+                Intent myIntent = new Intent((MainScreen.this), SignUp.class);
                 startActivityForResult(myIntent,0);
             }
         });
@@ -114,13 +115,13 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             //Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(Login.this, ""+user.getEmail(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(Login.this,Gscreen.class));
+                            Toast.makeText(MainScreen.this, ""+user.getEmail(), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(MainScreen.this,MainActivity.class));
                             finish();
                             //updateUI(user);
                         } else {
                             //If sign in fails, display a message to the user.
-                            Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainScreen.this, "Login Failed", Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
                         // ...
@@ -128,7 +129,7 @@ public class Login extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(Login.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainScreen.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
