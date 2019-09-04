@@ -7,11 +7,12 @@
     android:orientation="vertical"
     tools:context=".DatePicker">
 
-    <DatePicker
+    <Button
+        android:id="@+id/date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="35dp">
-    </DatePicker>
+        android:text="pick_date"
+        android:onClick="showDatePickerDialog"
+        tools:ignore="OnClick" />
 
 </LinearLayout>
