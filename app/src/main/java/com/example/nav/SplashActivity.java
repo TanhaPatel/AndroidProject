@@ -6,14 +6,12 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SplashActivity extends AppCompatActivity {
 
     Handler handler;
     TextView splash_txt;
-    ImageView splash_logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +25,10 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 4000);
+        }, 3000);
 
         splash_txt = findViewById(R.id.splash_txt);
         Animation text = AnimationUtils.loadAnimation(this, R.anim.splash_text);
         splash_txt.startAnimation(text);
-
-        splash_logo = findViewById(R.id.splash_logo);
-        Animation logo = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
-        splash_logo.startAnimation(logo);
     }
 }
