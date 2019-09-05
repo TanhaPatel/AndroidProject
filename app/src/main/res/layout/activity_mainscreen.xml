@@ -24,7 +24,7 @@
             app:srcCompat="@drawable/logo"/>
 
         <EditText
-            android:id="@+id/usernameEditTxt"
+            android:id="@+id/emailEditTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapWords"
@@ -33,7 +33,7 @@
             android:drawablePadding="12dp"
             android:padding="8dp"
             android:maxLines="1"
-            android:hint="Enter Username"
+            android:hint="Enter Email"
             android:textColorHint="#00ffff"
             android:textColor="#ffffff"
             android:drawableLeft="@drawable/ic_account_box_black_24dp"
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_gravity="center"
-            android:id="@+id/signin">
+            android:id="@+id/gsignin">
         </com.google.android.gms.common.SignInButton>
 
     </LinearLayout>

@@ -15,9 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,7 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity
+public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth firebaseAuth;
@@ -59,11 +57,16 @@ public class MainActivity extends AppCompatActivity
         //Part 2 has started
 
         firebaseAuth=FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser()==null)
+        if(firebaseAuth.getCurrentUser() != null)
         {
-            finish();
+            startActivity(new Intent(this, Main.class));
+
+        } else if(firebaseAuth.getCurrentUser() == null){
+            //finish();
             startActivity(new Intent(this, SignUp.class));
+
         }
+
         FirebaseUser user = firebaseAuth.getCurrentUser();
         /*nav_email.findViewById(R.id.header_textView);
         nav_email.setText(user.getEmail());*/
@@ -115,6 +118,7 @@ public class MainActivity extends AppCompatActivity
             Date d = new Date(prevYear, prevMonth, prevDay);
             c.setTime(d);
             return true;
+
         }
         if (id == R.id.go_to_date) {
             mDisplayDate = (ImageView) findViewById(R.id.go_to_date);
@@ -124,11 +128,12 @@ public class MainActivity extends AppCompatActivity
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog dialog = new DatePickerDialog(
-                    MainActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
+                    Main.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
             //startActivity(new Intent(this, DatePicker.class));
             return true;
+
         }
 
         return super.onOptionsItemSelected(item);

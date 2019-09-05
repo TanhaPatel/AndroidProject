@@ -56,7 +56,7 @@
         android:layout_marginTop="20dp"/>
 
     <EditText
-        android:id="@+id/passwordEditTxt"
+        android:id="@+id/signuppasswordEditTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textWebPassword"
@@ -72,7 +72,7 @@
         android:layout_marginTop="20dp"/>
 
     <EditText
-        android:id="@+id/signupconfirmpassEditTxt"
+        android:id="@+id/signupconfirmpasswordEditTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textWebPassword"
