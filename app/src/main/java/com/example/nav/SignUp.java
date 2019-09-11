@@ -38,7 +38,7 @@ public class SignUp extends AppCompatActivity {
         signupbtn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v == signupbtn1){
+                if(v == signupbtn1) {
                     registeruser();
                 }
             }
@@ -53,7 +53,7 @@ public class SignUp extends AppCompatActivity {
 
         if(!username.equals("") && !email.equals("") && !password.equals("") && !confirmpassword.equals(""))
         {
-            startActivity(new Intent(getApplicationContext(),Main.class));
+            startActivity(new Intent(getApplicationContext(), Drawer.class));
         } else {
             Toast.makeText(SignUp.this, "Fill all the required fields", Toast.LENGTH_SHORT).show();
         }
@@ -68,9 +68,9 @@ public class SignUp extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             //User Logged in Successfully
                             Toast.makeText(SignUp.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(),Main.class));
+                            startActivity(new Intent(getApplicationContext(), Drawer.class));
                         } else {
-                            Toast.makeText(SignUp.this, "Failed To register.Try Again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUp.this, "Failed To register. Try Again", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -28,21 +30,44 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Main extends AppCompatActivity
+public class Drawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    CardView addtaskCard, edittaskCard, viewtaskCard;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private ImageView mDisplayDate;
     private FirebaseAuth firebaseAuth;
     private GoogleSignInClient mGoogleSignInClient;
-    private ImageView mDisplayDate;
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_drawer);
 
+        addtaskCard = findViewById(R.id.addtaskCard);
+        edittaskCard = findViewById(R.id.edittaskCard);
+        viewtaskCard = findViewById(R.id.viewtaskCard);
 
-        //Part 1 inserted
+        addtaskCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AddTask.class));
+            }
+        });
+
+        edittaskCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), EditTask.class));
+            }
+        });
+
+        viewtaskCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ViewTask.class));
+            }
+        });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -50,29 +75,10 @@ public class Main extends AppCompatActivity
                 .build();
 
         mGoogleSignInClient= GoogleSignIn.getClient(this,gso);
-
-        //Part 1 Ended
-
-
-        //Part 2 has started
-
-        firebaseAuth=FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser() != null)
-        {
-            startActivity(new Intent(this, Main.class));
-
-        } else if(firebaseAuth.getCurrentUser() == null){
-            //finish();
-            startActivity(new Intent(this, SignUp.class));
-
+        firebaseAuth= FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() != null) {
+            startActivity(new Intent(this, Info.class));
         }
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        /*nav_email.findViewById(R.id.header_textView);
-        nav_email.setText(user.getEmail());*/
-
-        //Part 2 has ended
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,22 +124,22 @@ public class Main extends AppCompatActivity
             Date d = new Date(prevYear, prevMonth, prevDay);
             c.setTime(d);
             return true;
-
         }
+
         if (id == R.id.go_to_date) {
-            mDisplayDate = (ImageView) findViewById(R.id.go_to_date);
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog dialog = new DatePickerDialog(
-                    Main.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
+                    Drawer.this,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    mDateSetListener,
+                    year, month, day);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
-            //startActivity(new Intent(this, DatePicker.class));
             return true;
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -155,7 +161,7 @@ public class Main extends AppCompatActivity
             firebaseAuth.signOut();
             signOut();
             finish();
-            startActivity(new Intent(this, MainScreen.class));
+            startActivity(new Intent(this, Login.class));
 
         } else if (id == R.id.nav_info) {
             startActivity(new Intent(this, Info.class));
@@ -166,7 +172,7 @@ public class Main extends AppCompatActivity
             String shareBodyText = "Check it out. Your message goes here";
             sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
-            startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
+            startActivity(Intent.createChooser(sharingIntent, "Sharing Options"));
             return true;
 
         }

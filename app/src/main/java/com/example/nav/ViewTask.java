@@ -3,14 +3,11 @@ package com.example.nav;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Info extends AppCompatActivity {
+public class ViewTask extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_info);
+        setContentView(R.layout.activity_view_task);
     }
 }
-
-
-//api key = AIzaSyB1eC73lPa4YX8MrPNUBd7cHaVBt6xa0As

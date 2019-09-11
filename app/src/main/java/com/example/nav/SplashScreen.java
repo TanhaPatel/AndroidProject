@@ -8,7 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity {
 
     Handler handler;
     TextView splash_txt;
@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this,  MainScreen.class);
+                Intent intent = new Intent(SplashScreen.this,  Login.class);
                 startActivity(intent);
                 finish();
             }

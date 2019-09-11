@@ -5,13 +5,13 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="horizontal"
-tools:context=".Main">
+tools:context=".Drawer">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginTop="35dp">
+        android:layout_marginTop="45dp">
 
         <GridLayout
             android:layout_width="match_parent"
@@ -21,6 +21,7 @@ tools:context=".Main">
             android:columnOrderPreserved="false">
 
             <android.support.v7.widget.CardView
+                android:id="@+id/addtaskCard"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="30dp"
@@ -45,7 +46,7 @@ tools:context=".Main">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Day View"
+                        android:text="Add Task"
                         android:textSize="15dp"
                         android:layout_marginTop="12dp"/>
 
@@ -54,105 +55,7 @@ tools:context=".Main">
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:layout_margin="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/username"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Week View"
-                        android:textSize="15dp"
-                        android:layout_marginTop="12dp"/>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:layout_margin="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/username"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Month View"
-                        android:textSize="15dp"
-                        android:layout_marginTop="12dp"/>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:layout_margin="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/username"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Add task"
-                        android:textSize="15dp"
-                        android:layout_marginTop="12dp"/>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
+                android:id="@+id/edittaskCard"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="30dp"
@@ -185,40 +88,42 @@ tools:context=".Main">
 
             </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="12dp"
-                android:layout_margin="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/username"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="View Task"
-                        android:textSize="15dp"
-                        android:layout_marginTop="12dp"/>
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
         </GridLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/viewtaskCard"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="12dp"
+            android:layout_margin="12dp"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="300dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/username"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Task"
+                    android:textSize="15dp"
+                    android:layout_marginTop="12dp"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 
