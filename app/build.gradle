@@ -35,4 +35,11 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     //noinspection GradleCompatible
     implementation "com.android.support:gridlayout-v7:18.0.+"
+    //for day view
+    implementation 'com.framgia.library.calendardayview:library:1.0.4'
+    //for week view
+    implementation 'com.github.alamkanak:android-week-view:1.2.6'
+    //for month view
+    implementation "com.applandeo:material-calendar-view:1.0.1"
+    implementation "com.android.support:design:28.0.0"
 }

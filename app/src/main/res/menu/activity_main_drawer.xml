@@ -5,6 +5,22 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_year_view"
+            android:icon="@drawable/ic_view_comfy_black_24dp"
+            android:title="Year View" />
+        <item
+            android:id="@+id/nav_month_view"
+            android:icon="@drawable/ic_view_module_black_24dp"
+            android:title="Month view" />
+        <item
+            android:id="@+id/nav_week_view"
+            android:icon="@drawable/ic_view_week_black_24dp"
+            android:title="Week View" />
+        <item
+            android:id="@+id/nav_day_view"
+            android:icon="@drawable/ic_view_day_black_24dp"
+            android:title="Day View" />
+        <item
             android:id="@+id/nav_cng_pass"
             android:icon="@drawable/change_password"
             android:title="Change Password" />

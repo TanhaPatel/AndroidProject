@@ -1,14 +1,16 @@
 package com.example.nav;
 
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -17,68 +19,96 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class Drawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    CardView addtaskCard, edittaskCard, viewtaskCard;
+    // firebase auth variables
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private ImageView mDisplayDate;
     private FirebaseAuth firebaseAuth;
     private GoogleSignInClient mGoogleSignInClient;
+
+    //calendar variables
+    public static final String RESULT = "result";
+    public static final String EVENT = "event";
+    private static final int ADD_NOTE = 44;
+    private CalendarView mCalendarView;
+    private List<EventDay> mEventDays = new ArrayList<>();
+
+    //voice input variables
+    private static final int REQ_CODE_SPEECH_INPUT = 100;
+    private TextView mVoiceInputTv;
+    private ImageButton mSpeakBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
 
-        addtaskCard = findViewById(R.id.addtaskCard);
-        edittaskCard = findViewById(R.id.edittaskCard);
-        viewtaskCard = findViewById(R.id.viewtaskCard);
-
-        addtaskCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddTask.class));
-            }
-        });
-
-        edittaskCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), EditTask.class));
-            }
-        });
-
-        viewtaskCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ViewTask.class));
-            }
-        });
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient= GoogleSignIn.getClient(this,gso);
-        firebaseAuth= FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser() != null) {
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() != null) {
             startActivity(new Intent(this, Info.class));
         }
+
+        // calendar activity started
+
+        mCalendarView = findViewById(R.id.calendarView);
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.add_txt);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNote();
+            }
+        });
+
+        mCalendarView.setOnDayClickListener(new OnDayClickListener() {
+            @Override
+            public void onDayClick(EventDay eventDay) {
+                previewNote(eventDay);
+            }
+        });
+
+        // calendar activity ended
+
+        // voice input activity started
+
+        mVoiceInputTv = findViewById(R.id.voiceInput);
+        mSpeakBtn = findViewById(R.id.btnSpeak);
+        mSpeakBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override public void onClick(View v) {
+                startVoiceInput();
+            }
+        });
+
+        // voice input activity ended
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -151,7 +181,19 @@ public class Drawer extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_cng_pass) {
+        if (id == R.id.nav_year_view) {
+            startActivity(new Intent(this, YearView.class));
+
+        } else if (id == R.id.nav_month_view) {
+            startActivity(new Intent(this, MonthView.class));
+
+        } else if (id == R.id.nav_week_view) {
+            startActivity(new Intent(this, WeekView.class));
+
+        } else if (id == R.id.nav_day_view) {
+            startActivity(new Intent(this, DayView.class));
+
+        } else if (id == R.id.nav_cng_pass) {
 
         } else if (id == R.id.nav_cng_username) {
 
@@ -170,7 +212,7 @@ public class Drawer extends AppCompatActivity
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             String shareBodyText = "Check it out. Your message goes here";
-            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject here");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject here");
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
             startActivity(Intent.createChooser(sharingIntent, "Sharing Options"));
             return true;
@@ -182,11 +224,7 @@ public class Drawer extends AppCompatActivity
         return true;
     }
 
-
-    //Part 3 code has inserted
-
-    private void signOut()
-    {
+    private void signOut() {
         mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
@@ -195,7 +233,63 @@ public class Drawer extends AppCompatActivity
                 });
     }
 
-    //Part 3 code has ended
+    // onActivityResult switch case started
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQ_CODE_SPEECH_INPUT: {
+                if (resultCode == RESULT_OK && null != data) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                mVoiceInputTv.setText(result.get(0));
+                }
+                break;
+            }
 
+            case  ADD_NOTE: {
+                if (requestCode == ADD_NOTE && resultCode == RESULT_OK) {
+                    MyEventDay myEventDay = data.getParcelableExtra(RESULT);
+                    mCalendarView.setDate(myEventDay.getCalendar());
+                    mEventDays.add(myEventDay);
+                    mCalendarView.setEvents(mEventDays);
+                }
+                break;
+            }
+        }
+    }
+
+    // onActivityResult switch case ended
+
+    // add event by text started
+
+    private void addNote() {
+        Intent intent = new Intent(this, AddNoteActivity.class);
+        startActivityForResult(intent, ADD_NOTE);
+    }
+
+    private void previewNote(EventDay eventDay) {
+        Intent intent = new Intent(this, NotePreviewActivity.class);
+        if (eventDay instanceof MyEventDay) {
+            intent.putExtra(EVENT, (MyEventDay) eventDay);
+        }
+        startActivity(intent);
+    }
+
+    // add event by text ended
+
+    // add event by speech started
+
+    private void startVoiceInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hello, How can I help you?");
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+        }
+    }
+
+    // add event by speech ended
 }
