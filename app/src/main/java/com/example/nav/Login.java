@@ -33,13 +33,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
+
+    //defining views
     private EditText emailEditTxt;
     private EditText passwordEditTxt;
     private Button loginbtn;
     private Button signupbtn;
-    private ProgressDialog progress;
-    private FirebaseAuth firebaseAuth;
+
+    //google signin btn obj
     private SignInButton gsignin;
+
+    //progress dialog
+    private ProgressDialog progressDialog;
+
+    //firebase auth object
+    private FirebaseAuth firebaseAuth;
+
     private final static int RC_SIGN_IN = 2;
 
     //private String client_id="843639688016-h3pfocgi1d1hr3d6s1tucuj3rc5shjfd.apps.googleusercontent.com";
@@ -62,17 +71,27 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        //getting firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null) {
+
+        //if the objects getcurrentuser method is not null
+        //means user is already logged in
+        if(firebaseAuth.getCurrentUser() != null){
+            //close this activity
+            finish();
+            //opening profile activity
             startActivity(new Intent(getApplicationContext(), Drawer.class));
         }
 
+        //initializing views
         emailEditTxt = findViewById(R.id.emailEditTxt);
         passwordEditTxt = findViewById(R.id.passwordEditTxt);
         loginbtn = findViewById(R.id.loginbtn);
         signupbtn = findViewById(R.id.signupbtn);
-        progress = new ProgressDialog(this);
         gsignin = findViewById(R.id.gsignin);
+
+        progressDialog = new ProgressDialog(this);
 
         // Build a GoogleSignInClient with the options specified by gso.
         loginbtn.setOnClickListener(this);
@@ -117,32 +136,40 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     // Internet detection code ends
 
+    //method for user login starts
+
     private void userLogin() {
         String email = emailEditTxt.getText().toString().trim();
         String password = passwordEditTxt.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "Enter Valid Email", Toast.LENGTH_SHORT).show();
+        //checking if email and passwords are empty
+        if(TextUtils.isEmpty(email)){
+            Toast.makeText(this,"Please enter email",Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(password)){
+            Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
             return;
         }
 
-        progress.setMessage("Logging in");
-        progress.show();
+        //if the email and password are not empty
+        //displaying a progress dialog
+        progressDialog.setMessage("Logging in...");
+        progressDialog.show();
 
+        //logging in the user
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progress.dismiss();
-                        if (task.isSuccessful()) {
+                        progressDialog.dismiss();
+                        //if the task is successfull
+                        if(task.isSuccessful()){
+                            //start the profile activity
                             finish();
                             startActivity(new Intent(getApplicationContext(), Drawer.class));
-                        } else {
+                        }  else {
                             Toast.makeText(Login.this, "You don't have registered. Please register first.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), SignUp.class));
                         }
@@ -150,7 +177,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 });
     }
 
-    private void signIn() {
+    //method for user login ends
+
+    //goes to signup page
+    private void signUp() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -167,7 +197,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
 
         if (v == gsignin) {
-            signIn();
+            signUp();
         }
     }
 
@@ -184,8 +214,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                progress.setMessage("Signing In");
-                progress.show();
+                progressDialog.setMessage("Signing In");
+                progressDialog.show();
                 firebaseAuthWithGoogle(account);
 
             } catch (ApiException e) {

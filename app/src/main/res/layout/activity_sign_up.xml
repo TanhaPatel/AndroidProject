@@ -24,22 +24,6 @@
         app:srcCompat="@drawable/logo"/>
 
     <EditText
-        android:id="@+id/usernameEditTxt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textCapWords"
-        android:textSize="20dp"
-        android:background="@android:color/transparent"
-        android:drawablePadding="12dp"
-        android:padding="8dp"
-        android:maxLines="1"
-        android:hint="Enter Username"
-        android:textColorHint="#00ffff"
-        android:textColor="#ffffff"
-        android:drawableLeft="@drawable/ic_account_box_black_24dp"
-        android:layout_marginTop="40dp"/>
-
-    <EditText
         android:id="@+id/signupemailEditTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

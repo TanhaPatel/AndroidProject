@@ -42,9 +42,10 @@ import java.util.Locale;
 public class Drawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    // firebase auth variables
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private ImageView mDisplayDate;
+
+    //firebase auth variables
     private FirebaseAuth firebaseAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -72,9 +73,6 @@ public class Drawer extends AppCompatActivity
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null) {
-            startActivity(new Intent(this, Info.class));
-        }
 
         // calendar activity started
 
@@ -111,7 +109,7 @@ public class Drawer extends AppCompatActivity
         // voice input activity ended
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -163,10 +161,7 @@ public class Drawer extends AppCompatActivity
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog dialog = new DatePickerDialog(
-                    Drawer.this,
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    mDateSetListener,
-                    year, month, day);
+                    Drawer.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
             return true;
@@ -200,9 +195,12 @@ public class Drawer extends AppCompatActivity
         } else if (id == R.id.nav_del_acc) {
 
         } else if (id == R.id.nav_logout) {
+            //logging out the user
             firebaseAuth.signOut();
-            signOut();
+            //closing activity
+            //signOut();  (check usage)
             finish();
+            //starting login activity
             startActivity(new Intent(this, Login.class));
 
         } else if (id == R.id.nav_info) {

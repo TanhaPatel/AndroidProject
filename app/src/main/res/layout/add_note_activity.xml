@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="370dp"
         app:datePicker="true"
-        app:headerColor="@color/colorPrimary"
+        app:headerColor="@color/cardview_light_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

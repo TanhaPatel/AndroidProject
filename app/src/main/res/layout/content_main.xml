@@ -11,11 +11,14 @@ tools:context=".Drawer">
         android:id="@+id/calendarView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:headerColor="@color/colorPrimary"
+        app:headerColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        app:selectionColor="@color/colorAccent"
+        app:todayLabelColor="@color/colorPrimaryDark" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_txt"

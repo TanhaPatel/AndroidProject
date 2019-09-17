@@ -18,15 +18,14 @@
         <activity android:name=".MonthView" />
         <activity android:name=".YearView" />
         <activity android:name=".TTSandSTT" />
-        <activity android:name=".Login" />
+        <activity android:name=".Drawer" />
         <activity android:name=".SignUp" />
-        <activity android:name=".DatePicker" />
         <activity android:name=".Info" />
         <activity android:name=".SplashScreen" />
         <activity android:name=".AddNoteActivity" />
         <activity android:name=".NotePreviewActivity" />
         <activity
-            android:name=".Drawer"
+            android:name=".Login"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
