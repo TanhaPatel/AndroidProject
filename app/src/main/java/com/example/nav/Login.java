@@ -60,10 +60,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(!isConnected(Login.this))
+        /*if(!InternetDetector.isConnected(Login.this))
         {
-            buildDialog(Login.this).show();
-        }
+            InternetDetector.buildDialog(Login.this).show();
+        }*/
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -99,6 +99,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         gsignin.setOnClickListener(this);
     }
 
+/*
     //Internet detection code Start
 
     public boolean isConnected(Context context) {
@@ -119,6 +120,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public AlertDialog.Builder buildDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setCancelable(false);
         builder.setTitle("No Internet Connection");
         builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit");
 
@@ -135,6 +137,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     // Internet detection code ends
+*/
 
     //method for user login starts
 
@@ -150,6 +153,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         if(TextUtils.isEmpty(password)){
             Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(password.length() < 6 || password.length() > 10){
+            passwordEditTxt.setError("Password should be between 6 to 10 characters");
             return;
         }
 

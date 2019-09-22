@@ -145,7 +145,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:drawableLeft="@drawable/ic_copyright_black_24dp"
+        android:drawableLeft="@drawable/ic_copyright_white_24dp"
         android:text=" Task Planner 2019"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"

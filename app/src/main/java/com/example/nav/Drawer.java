@@ -35,7 +35,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,7 +52,7 @@ public class Drawer extends AppCompatActivity
     public static final String RESULT = "result";
     public static final String EVENT = "event";
     private static final int ADD_NOTE = 44;
-    private CalendarView mCalendarView;
+    private CalendarView calendarView;
     private List<EventDay> mEventDays = new ArrayList<>();
 
     //voice input variables
@@ -76,7 +75,7 @@ public class Drawer extends AppCompatActivity
 
         // calendar activity started
 
-        mCalendarView = findViewById(R.id.calendarView);
+        calendarView = findViewById(R.id.calendarView);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.add_txt);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +85,7 @@ public class Drawer extends AppCompatActivity
             }
         });
 
-        mCalendarView.setOnDayClickListener(new OnDayClickListener() {
+        calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
                 previewNote(eventDay);
@@ -108,8 +107,39 @@ public class Drawer extends AppCompatActivity
 
         // voice input activity ended
 
+        // toolbar activity starts
+
         Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        toolbar.setSubtitle("Task Planner");
+        toolbar.inflateMenu(R.menu.main);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+            int id = menuItem.getItemId();
+
+            //noinspection SimplifiableIfStatement
+            if (id == R.id.go_to_today) {
+
+            }
+
+            if (id == R.id.go_to_date) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        Drawer.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+                return true;
+            }
+            return false;
+            }
+        });
+
+        // toolbar activity ends
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -137,58 +167,12 @@ public class Drawer extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.go_to_today) {
-            Calendar c = Calendar.getInstance();
-            int prevDay = c.get(Calendar.DAY_OF_MONTH);
-            int prevMonth = c.get(Calendar.MONTH);
-            int prevYear = c.get(Calendar.YEAR);
-            Date d = new Date(prevYear, prevMonth, prevDay);
-            c.setTime(d);
-            return true;
-        }
-
-        if (id == R.id.go_to_date) {
-            Calendar cal = Calendar.getInstance();
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog dialog = new DatePickerDialog(
-                    Drawer.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialog.show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_year_view) {
-            startActivity(new Intent(this, YearView.class));
-
-        } else if (id == R.id.nav_month_view) {
-            startActivity(new Intent(this, MonthView.class));
-
-        } else if (id == R.id.nav_week_view) {
-            startActivity(new Intent(this, WeekView.class));
-
-        } else if (id == R.id.nav_day_view) {
-            startActivity(new Intent(this, DayView.class));
-
-        } else if (id == R.id.nav_cng_pass) {
+        if (id == R.id.nav_cng_pass) {
 
         } else if (id == R.id.nav_cng_username) {
 
@@ -248,9 +232,9 @@ public class Drawer extends AppCompatActivity
             case  ADD_NOTE: {
                 if (requestCode == ADD_NOTE && resultCode == RESULT_OK) {
                     MyEventDay myEventDay = data.getParcelableExtra(RESULT);
-                    mCalendarView.setDate(myEventDay.getCalendar());
+                    calendarView.setDate(myEventDay.getCalendar());
                     mEventDays.add(myEventDay);
-                    mCalendarView.setEvents(mEventDays);
+                    calendarView.setEvents(mEventDays);
                 }
                 break;
             }

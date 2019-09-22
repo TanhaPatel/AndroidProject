@@ -19,9 +19,10 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     //defining view objects
-    private EditText editTextEmail;
-    private EditText editTextPassword;
-    private Button buttonSignup;
+    private EditText signupemailEditText;
+    private EditText signuppasswordEditTxt;
+    private EditText signupconfirmpasswordEditTxt;
+    private Button signupbtn1;
 
     private ProgressDialog progressDialog;
 
@@ -47,22 +48,24 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         }
 
         //initializing views
-        editTextEmail = (EditText) findViewById(R.id.signupemailEditTxt);
-        editTextPassword = (EditText) findViewById(R.id.signuppasswordEditTxt);
-        buttonSignup = (Button) findViewById(R.id.signupbtn1);
+        signupemailEditText = (EditText) findViewById(R.id.signupemailEditTxt);
+        signuppasswordEditTxt = (EditText) findViewById(R.id.signuppasswordEditTxt);
+        signupconfirmpasswordEditTxt = (EditText) findViewById(R.id.signupconfirmpasswordEditTxt);
+        signupbtn1 = (Button) findViewById(R.id.signupbtn1);
 
         progressDialog = new ProgressDialog(this);
 
         //attaching listener to button
-        buttonSignup.setOnClickListener(this);
+        signupbtn1.setOnClickListener(this);
 
     }
 
     private void registerUser(){
 
         //getting email and password from edit texts
-        String email = editTextEmail.getText().toString().trim();
-        String password  = editTextPassword.getText().toString().trim();
+        String email = signupemailEditText.getText().toString().trim();
+        String password  = signuppasswordEditTxt.getText().toString().trim();
+        String confirmpassword  = signupconfirmpasswordEditTxt.getText().toString().trim();
 
         //checking if email and passwords are empty
         if(TextUtils.isEmpty(email)){
@@ -72,6 +75,21 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         if(TextUtils.isEmpty(password)){
             Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(password)){
+            Toast.makeText(this,"Password doesn't match",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(!(password == confirmpassword)){
+            signupconfirmpasswordEditTxt.setError("Password doesn't match");
+            return;
+        }
+
+        if(password.length() < 6 || password.length() > 10){
+            signuppasswordEditTxt.setError("Password should be between 6 to 10 characters");
             return;
         }
 
@@ -102,7 +120,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
-        if(view == buttonSignup){
+        if(view == signupbtn1){
             registerUser();
         }
     }

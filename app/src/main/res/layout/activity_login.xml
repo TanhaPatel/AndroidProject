@@ -23,37 +23,55 @@
             android:layout_marginBottom="20dp"
             app:srcCompat="@drawable/logo"/>
 
-        <EditText
-            android:id="@+id/emailEditTxt"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/emailLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapWords"
-            android:textSize="20dp"
-            android:background="@android:color/transparent"
-            android:drawablePadding="12dp"
-            android:padding="8dp"
-            android:maxLines="1"
-            android:hint="Enter Email"
             android:textColorHint="#00ffff"
-            android:textColor="#ffffff"
-            android:drawableLeft="@drawable/ic_account_box_black_24dp"
-            android:layout_marginTop="40dp"/>
+            android:textColor="#ffffff">
 
-        <EditText
-            android:id="@+id/passwordEditTxt"
+            <EditText
+                android:id="@+id/emailEditTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:hint="Enter Email"
+                android:drawablePadding="12dp"
+                android:padding="8dp"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:layout_marginTop="40dp"
+                android:drawableLeft="@drawable/ic_email_white_24dp"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textWebPassword"
-            android:textSize="20dp"
-            android:background="@android:color/transparent"
-            android:drawablePadding="12dp"
-            android:padding="8dp"
-            android:maxLines="1"
-            android:hint="Enter Password"
             android:textColorHint="#00ffff"
-            android:textColor="#ffffff"
-            android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
-            android:layout_marginTop="20dp"/>
+            android:textColor="#ffffff">
+
+            <EditText
+                android:id="@+id/passwordEditTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:hint="Enter Password"
+                android:drawablePadding="12dp"
+                android:padding="8dp"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:layout_marginTop="40dp"
+                android:drawableLeft="@drawable/ic_lock_outline_white_24dp"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/loginshowpassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Show Password"
+            android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/loginbtn"
