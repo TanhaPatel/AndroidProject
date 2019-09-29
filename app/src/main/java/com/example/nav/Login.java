@@ -10,11 +10,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import android.support.v7.app.AlertDialog;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -39,6 +41,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private EditText passwordEditTxt;
     private Button loginbtn;
     private Button signupbtn;
+    private Button resetpassword;
+    private CheckBox loginshowpassword;
 
     //google signin btn obj
     private SignInButton gsignin;
@@ -60,10 +64,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /*if(!InternetDetector.isConnected(Login.this))
+        if(!isConnected(Login.this))
         {
-            InternetDetector.buildDialog(Login.this).show();
-        }*/
+            buildDialog(Login.this).show();
+        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -89,17 +93,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         passwordEditTxt = findViewById(R.id.passwordEditTxt);
         loginbtn = findViewById(R.id.loginbtn);
         signupbtn = findViewById(R.id.signupbtn);
+        resetpassword = findViewById(R.id.resetpassword);
         gsignin = findViewById(R.id.gsignin);
+        loginshowpassword = findViewById(R.id.loginshowpassword);
 
         progressDialog = new ProgressDialog(this);
 
         // Build a GoogleSignInClient with the options specified by gso.
         loginbtn.setOnClickListener(this);
         signupbtn.setOnClickListener(this);
+        resetpassword.setOnClickListener(this);
         gsignin.setOnClickListener(this);
+        loginshowpassword.setOnClickListener(this);
     }
 
-/*
+
     //Internet detection code Start
 
     public boolean isConnected(Context context) {
@@ -137,7 +145,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     // Internet detection code ends
-*/
+
 
     //method for user login starts
 
@@ -187,11 +195,40 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     //method for user login ends
 
+    //show password code starts
+
+    private void showpassword() {
+        if(loginshowpassword.isChecked()) {
+            // show password
+            passwordEditTxt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            //Toast.makeText(MainActivity.this, "WordPress Checked", Toast.LENGTH_LONG).show();
+        } else {
+            // hide password
+            passwordEditTxt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            //Toast.makeText(MainActivity.this, "WordPress Un-Checked", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //show password code ends
+
     //goes to signup page
     private void signUp() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+    //reset password code starts
+
+    private void resetpassword() {
+        resetpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, ResetPassword.class));
+            }
+        });
+    }
+
+    //reset password code ends
 
     @Override
     public void onClick(View v) {
@@ -207,8 +244,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         if (v == gsignin) {
             signUp();
         }
-    }
 
+        if (v == loginshowpassword) {
+            showpassword();
+        }
+
+        if (v == resetpassword) {
+            resetpassword();
+        }
+    }
 
     // Configure Google Sign In
     @Override

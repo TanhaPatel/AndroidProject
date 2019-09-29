@@ -38,6 +38,7 @@
                 android:hint="Enter Email"
                 android:drawablePadding="12dp"
                 android:padding="8dp"
+                android:textColor="#ffffff"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:layout_marginTop="40dp"
@@ -59,6 +60,7 @@
                 android:hint="Enter Password"
                 android:drawablePadding="12dp"
                 android:padding="8dp"
+                android:textColor="#ffffff"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:layout_marginTop="40dp"
@@ -72,6 +74,16 @@
             android:layout_gravity="center_horizontal"
             android:text="Show Password"
             android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/resetpassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:background="@null"
+            android:text="Forgot your password?"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent" />
 
         <Button
             android:id="@+id/loginbtn"

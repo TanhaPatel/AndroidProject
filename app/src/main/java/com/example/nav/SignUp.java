@@ -1,13 +1,22 @@
 package com.example.nav;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,14 +24,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     //defining view objects
     private EditText signupemailEditText;
     private EditText signuppasswordEditTxt;
-    private EditText signupconfirmpasswordEditTxt;
     private Button signupbtn1;
+    private CheckBox signupshowpassword;
 
     private ProgressDialog progressDialog;
 
@@ -33,6 +43,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        if(!isConnected(SignUp.this))
+        {
+            buildDialog(SignUp.this).show();
+        }
 
         //initializing firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
@@ -50,22 +65,60 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         //initializing views
         signupemailEditText = (EditText) findViewById(R.id.signupemailEditTxt);
         signuppasswordEditTxt = (EditText) findViewById(R.id.signuppasswordEditTxt);
-        signupconfirmpasswordEditTxt = (EditText) findViewById(R.id.signupconfirmpasswordEditTxt);
         signupbtn1 = (Button) findViewById(R.id.signupbtn1);
+        signupshowpassword = findViewById(R.id.signupshowpassword);
 
         progressDialog = new ProgressDialog(this);
 
         //attaching listener to button
         signupbtn1.setOnClickListener(this);
+        signupshowpassword.setOnClickListener(this);
 
     }
+
+    //Internet detection code Start
+
+    public boolean isConnected(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netinfo = cm.getActiveNetworkInfo();
+
+        if (netinfo != null && netinfo.isConnectedOrConnecting()) {
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            else return false;
+        } else
+            return false;
+    }
+
+    public AlertDialog.Builder buildDialog(Context c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setCancelable(false);
+        builder.setTitle("No Internet Connection");
+        builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit");
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        return builder;
+
+    }
+
+    // Internet detection code ends
 
     private void registerUser(){
 
         //getting email and password from edit texts
         String email = signupemailEditText.getText().toString().trim();
         String password  = signuppasswordEditTxt.getText().toString().trim();
-        String confirmpassword  = signupconfirmpasswordEditTxt.getText().toString().trim();
 
         //checking if email and passwords are empty
         if(TextUtils.isEmpty(email)){
@@ -83,19 +136,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-        if(!(password == confirmpassword)){
-            signupconfirmpasswordEditTxt.setError("Password doesn't match");
-            return;
-        }
-
         if(password.length() < 6 || password.length() > 10){
             signuppasswordEditTxt.setError("Password should be between 6 to 10 characters");
             return;
         }
 
-        //if the email and password are not empty
         //displaying a progress dialog
-
         progressDialog.setMessage("Registering Please Wait...");
         progressDialog.show();
 
@@ -108,7 +154,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                         if(task.isSuccessful()){
                             finish();
                             startActivity(new Intent(getApplicationContext(), Drawer.class));
-                        }else{
+                        } else {
                             //display some message here
                             Toast.makeText(SignUp.this,"Registration Error",Toast.LENGTH_LONG).show();
                         }
@@ -117,11 +163,32 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 });
     }
 
-    @Override
-    public void onClick(View view) {
+    // show password code starts
 
-        if(view == signupbtn1){
+    private void showpassword() {
+        if(signupshowpassword.isChecked()) {
+            // show password
+            signuppasswordEditTxt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            //Toast.makeText(MainActivity.this, "WordPress Checked", Toast.LENGTH_LONG).show();
+        } else {
+            // hide password
+            signuppasswordEditTxt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            //Toast.makeText(MainActivity.this, "WordPress Un-Checked", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // show password code ends
+
+
+    @Override
+    public void onClick(View v) {
+
+        if(v == signupbtn1){
             registerUser();
+        }
+
+        if (v == signupshowpassword) {
+            showpassword();
         }
     }
 }

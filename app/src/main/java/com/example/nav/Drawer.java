@@ -2,15 +2,20 @@ package com.example.nav;
 
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +38,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,17 +48,16 @@ import java.util.Locale;
 public class Drawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String EVENT = "Your task appears here";
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private ImageView mDisplayDate;
 
     //firebase auth variables
     private FirebaseAuth firebaseAuth;
     private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseUser firebaseUser;
 
     //calendar variables
-    public static final String RESULT = "result";
-    public static final String EVENT = "event";
-    private static final int ADD_NOTE = 44;
     private CalendarView calendarView;
     private List<EventDay> mEventDays = new ArrayList<>();
 
@@ -65,6 +71,11 @@ public class Drawer extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
 
+        if(!isConnected(Drawer.this))
+        {
+            buildDialog(Drawer.this).show();
+        }
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -72,6 +83,7 @@ public class Drawer extends AppCompatActivity
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
 
         // calendar activity started
 
@@ -81,14 +93,14 @@ public class Drawer extends AppCompatActivity
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNote();
+                addTask();
             }
         });
 
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
-                previewNote(eventDay);
+                viewTask(eventDay);
             }
         });
 
@@ -128,8 +140,7 @@ public class Drawer extends AppCompatActivity
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dialog = new DatePickerDialog(
-                        Drawer.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
+                DatePickerDialog dialog = new DatePickerDialog(Drawer.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
                 return true;
@@ -148,6 +159,43 @@ public class Drawer extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    //Internet detection code Start
+
+    public boolean isConnected(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netinfo = cm.getActiveNetworkInfo();
+
+        if (netinfo != null && netinfo.isConnectedOrConnecting()) {
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            else return false;
+        } else
+            return false;
+    }
+
+    public AlertDialog.Builder buildDialog(Context c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setCancelable(false);
+        builder.setTitle("No Internet Connection");
+        builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit");
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        return builder;
+    }
+
+    // Internet detection code ends
 
     @Override
     public void onBackPressed() {
@@ -172,17 +220,23 @@ public class Drawer extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_cng_pass) {
+        if (id == R.id.nav_agenda) {
+            startActivity(new Intent(Drawer.this, ViewTask.class));
+
+        } else if (id == R.id.nav_cng_pass) {
+            startActivity(new Intent(Drawer.this, ResetPassword.class));
 
         } else if (id == R.id.nav_cng_username) {
 
         } else if (id == R.id.nav_del_acc) {
+            firebaseUser.delete();
+            startActivity(new Intent(this, Login.class));
 
         } else if (id == R.id.nav_logout) {
             //logging out the user
             firebaseAuth.signOut();
             //closing activity
-            //signOut();  (check usage)
+            signOut();
             finish();
             //starting login activity
             startActivity(new Intent(this, Login.class));
@@ -228,16 +282,6 @@ public class Drawer extends AppCompatActivity
                 }
                 break;
             }
-
-            case  ADD_NOTE: {
-                if (requestCode == ADD_NOTE && resultCode == RESULT_OK) {
-                    MyEventDay myEventDay = data.getParcelableExtra(RESULT);
-                    calendarView.setDate(myEventDay.getCalendar());
-                    mEventDays.add(myEventDay);
-                    calendarView.setEvents(mEventDays);
-                }
-                break;
-            }
         }
     }
 
@@ -245,13 +289,12 @@ public class Drawer extends AppCompatActivity
 
     // add event by text started
 
-    private void addNote() {
-        Intent intent = new Intent(this, AddNoteActivity.class);
-        startActivityForResult(intent, ADD_NOTE);
+    private void addTask() {
+        startActivity(new Intent(this, AddTask.class));
     }
 
-    private void previewNote(EventDay eventDay) {
-        Intent intent = new Intent(this, NotePreviewActivity.class);
+    private void viewTask(EventDay eventDay) {
+        Intent intent = new Intent(this, ViewTask.class);
         if (eventDay instanceof MyEventDay) {
             intent.putExtra(EVENT, (MyEventDay) eventDay);
         }
