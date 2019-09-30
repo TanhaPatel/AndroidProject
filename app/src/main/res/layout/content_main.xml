@@ -22,7 +22,48 @@ tools:context=".Drawer">
         app:selectionColor="@color/colorAccent"
         app:todayLabelColor="@color/colorTodayDate" />
 
-    <android.support.design.widget.FloatingActionButton
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/fab_margin"
+            app:fab_addButtonColorNormal="@color/colorPrimary"
+            app:fab_addButtonColorPressed="@color/colorAccent"
+            app:fab_labelStyle="@style/customFab"
+            android:layout_alignParentRight="true">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorPressed="@color/colorAccent"
+                app:fab_colorNormal="@color/colorPrimary"
+                app:fab_icon="@drawable/ic_add_white_24dp"
+                android:id="@+id/add_txt"
+                app:fab_size="mini"
+                app:fab_title="Add Task By Text" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorPressed="@color/colorAccent"
+                app:fab_colorNormal="@color/colorPrimary"
+                app:fab_icon="@drawable/ic_mic_white_24dp"
+                android:id="@+id/btnSpeak"
+                app:fab_size="mini"
+                app:fab_title="Add Task By Speech" />
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    </RelativeLayout>
+
+    <!-- <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,6 +80,6 @@ tools:context=".Drawer">
         android:src="@drawable/ic_mic_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/add_txt"/>
+        app:layout_constraintEnd_toStartOf="@id/add_txt"/> -->
 
 </android.support.constraint.ConstraintLayout>

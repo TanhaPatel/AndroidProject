@@ -28,10 +28,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -40,6 +42,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -88,15 +91,6 @@ public class Drawer extends AppCompatActivity
         // calendar activity started
 
         calendarView = findViewById(R.id.calendarView);
-
-        FloatingActionButton floatingActionButton = findViewById(R.id.add_txt);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addTask();
-            }
-        });
-
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
@@ -106,23 +100,39 @@ public class Drawer extends AppCompatActivity
 
         // calendar activity ended
 
-        // voice input activity started
+        // inputs activity started
 
-        mVoiceInputTv = findViewById(R.id.voiceInput);
-        mSpeakBtn = findViewById(R.id.btnSpeak);
-        mSpeakBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override public void onClick(View v) {
+        FloatingActionsMenu fab=findViewById(R.id.fab);
+        final com.getbase.floatingactionbutton.FloatingActionButton add_txt = findViewById(R.id.add_txt);
+        final com.getbase.floatingactionbutton.FloatingActionButton btnSpeak = findViewById(R.id.btnSpeak);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        add_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTask();
+            }
+        });
+
+        btnSpeak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 startVoiceInput();
             }
         });
 
-        // voice input activity ended
+        // inputs activity ended
 
         // toolbar activity starts
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setSubtitle("Task Planner");
+        toolbar.setTitle("Task Planner");
+        toolbar.setSubtitle("Systematise your day!!!");
         toolbar.inflateMenu(R.menu.main);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -225,8 +235,6 @@ public class Drawer extends AppCompatActivity
 
         } else if (id == R.id.nav_cng_pass) {
             startActivity(new Intent(Drawer.this, ResetPassword.class));
-
-        } else if (id == R.id.nav_cng_username) {
 
         } else if (id == R.id.nav_del_acc) {
             firebaseUser.delete();

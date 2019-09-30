@@ -5,4 +5,5 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/colorAccent</item>
     </style>
+
 </resources>

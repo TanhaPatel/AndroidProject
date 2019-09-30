@@ -30,7 +30,7 @@
         android:background="@null"
         android:scaleType="fitCenter"
         android:layout_marginTop="100dp"
-        android:src="@drawable/ic_mic_black_24dp" />
+        android:src="@drawable/ic_mic_white_24dp" />
 
     <TextView
         android:id ="@+id/voiceInput"
