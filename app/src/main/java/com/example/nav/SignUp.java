@@ -147,20 +147,20 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         //creating a new user
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        //checking if success
-                        if(task.isSuccessful()){
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), Drawer.class));
-                        } else {
-                            //display some message here
-                            Toast.makeText(SignUp.this,"Registration Error",Toast.LENGTH_LONG).show();
-                        }
-                        progressDialog.dismiss();
-                    }
-                });
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                //checking if success
+                if(task.isSuccessful()){
+                    sendVerificationEmail();
+
+                } else {
+                    // if failed
+                    Toast.makeText(SignUp.this,"Registration Error",Toast.LENGTH_LONG).show();
+                }
+                progressDialog.dismiss();
+                }
+            });
     }
 
     // show password code starts
@@ -179,6 +179,34 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     // show password code ends
 
+    // email verification code starts
+
+    private void sendVerificationEmail() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.sendEmailVerification()
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // email sent
+                    // after email is sent just logout the user and finish this activity
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(SignUp.this, Login.class));
+                    finish();
+                } else {
+                    // email not sent, so display message and restart the activity or do whatever you wish to do
+                    //restart this activity
+                    overridePendingTransition(0, 0);
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(getIntent());
+                }
+                }
+            });
+    }
+
+    // email verification code ends
 
     @Override
     public void onClick(View v) {
