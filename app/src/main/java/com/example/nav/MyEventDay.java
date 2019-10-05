@@ -8,6 +8,7 @@ import com.applandeo.materialcalendarview.EventDay;
 import java.util.Calendar;
 
 class MyEventDay extends EventDay implements Parcelable {
+    ViewTask vt;
     private String mNote;
 
     MyEventDay(Calendar day, int imageResource, String note) {

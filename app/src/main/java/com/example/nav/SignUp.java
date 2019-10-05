@@ -191,6 +191,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 if (task.isSuccessful()) {
                     // email sent
                     // after email is sent just logout the user and finish this activity
+                    Toast.makeText(SignUp.this, "Verification email has been sent to given email", Toast.LENGTH_LONG).show();
                     FirebaseAuth.getInstance().signOut();
                     startActivity(new Intent(SignUp.this, Login.class));
                     finish();

@@ -2,16 +2,26 @@ package com.example.nav;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Date;
+
 @IgnoreExtraProperties
 public class TaskRetrieve {
 
-    private String task,id;
+    String task;
+    Date datentime;
 
     public TaskRetrieve(){}
 
-    public TaskRetrieve(String task, String id) {
+    public TaskRetrieve(String task) {
         this.task = task;
-        this.id = id;
+    }
+
+    public Date getDatentime() {
+        return datentime;
+    }
+
+    public void setDatentime(Date datentime) {
+        this.datentime = datentime;
     }
 
     public String getTask() {
@@ -22,11 +32,4 @@ public class TaskRetrieve {
         this.task = task;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 }

@@ -1,22 +1,25 @@
 package com.example.nav;
 
+import java.util.Date;
+
 public class TaskSender {
 
-    String id, task;
+    String task;
+    Date datentime;
 
     public TaskSender(){}
 
-    public TaskSender(String id, String task) {
-        this.id = id;
+    public TaskSender(Date datentime, String task) {
+        this.datentime = datentime;
         this.task = task;
     }
 
-    public String getId() {
-        return id;
+    public Date getDatentime() {
+        return datentime;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setDatentime(Date datentime) {
+        this.datentime = datentime;
     }
 
     public String getTask() {

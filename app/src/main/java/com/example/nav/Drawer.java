@@ -303,10 +303,13 @@ public class Drawer extends AppCompatActivity
 
     private void viewTask(EventDay eventDay) {
         Intent intent = new Intent(this, ViewTask.class);
-        if (eventDay instanceof MyEventDay) {
+        if(eventDay instanceof MyEventDay) {
             intent.putExtra(EVENT, (MyEventDay) eventDay);
+            startActivity(intent);
+
+        } else {
+            Toast.makeText(this, "No Task assigned for this date", Toast.LENGTH_LONG).show();
         }
-        startActivity(intent);
     }
 
     // add event by text ended
@@ -320,8 +323,8 @@ public class Drawer extends AppCompatActivity
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hello, How can I help you?");
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-        } catch (ActivityNotFoundException a) {
-        }
+
+        } catch (ActivityNotFoundException a) { }
     }
 
     // add event by speech ended
