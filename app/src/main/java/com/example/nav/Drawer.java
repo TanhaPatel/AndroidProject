@@ -1,6 +1,7 @@
 package com.example.nav;
 
 import android.app.DatePickerDialog;
+import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,9 +11,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -24,7 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,18 +43,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class Drawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String EVENT = "Your task appears here";
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-    private ImageView mDisplayDate;
 
     //firebase auth variables
     private FirebaseAuth firebaseAuth;
@@ -62,12 +61,10 @@ public class Drawer extends AppCompatActivity
 
     //calendar variables
     private CalendarView calendarView;
-    private List<EventDay> mEventDays = new ArrayList<>();
 
     //voice input variables
     private static final int REQ_CODE_SPEECH_INPUT = 100;
     private TextView mVoiceInputTv;
-    private ImageButton mSpeakBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +97,7 @@ public class Drawer extends AppCompatActivity
 
         // calendar activity ended
 
-        // inputs activity started
+        // fab activity started
 
         FloatingActionsMenu fab=findViewById(R.id.fab);
         final com.getbase.floatingactionbutton.FloatingActionButton add_txt = findViewById(R.id.add_txt);
@@ -126,7 +123,7 @@ public class Drawer extends AppCompatActivity
             }
         });
 
-        // inputs activity ended
+        // fab activity ended
 
         // toolbar activity starts
 
@@ -141,7 +138,7 @@ public class Drawer extends AppCompatActivity
 
             //noinspection SimplifiableIfStatement
             if (id == R.id.go_to_today) {
-
+                calendarView.setDate(Calendar.getInstance());
             }
 
             if (id == R.id.go_to_date) {
@@ -192,13 +189,29 @@ public class Drawer extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setCancelable(false);
         builder.setTitle("No Internet Connection");
-        builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit");
+        builder.setMessage("You need to have Mobile Data or wifi to access the application.");
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
+        builder.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
+            }
+        });
+
+        builder.setNegativeButton("Try Again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+                startActivity(getIntent());
+            }
+        });
+
+        builder.setPositiveButton("Turn On!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent();
+                i.setAction(Settings.ACTION_DATA_USAGE_SETTINGS);
+                startActivity(i);
             }
         });
 
@@ -230,7 +243,13 @@ public class Drawer extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_agenda) {
+        if (id == R.id.nav_addtask_txt) {
+            startActivity(new Intent(Drawer.this, AddTaskTxt.class));
+
+        } else if (id == R.id.nav_addtask_voice) {
+            startActivity(new Intent(Drawer.this, AddTaskVoice.class));
+
+        } else if (id == R.id.nav_agenda) {
             startActivity(new Intent(Drawer.this, ViewTask.class));
 
         } else if (id == R.id.nav_cng_pass) {
@@ -298,18 +317,7 @@ public class Drawer extends AppCompatActivity
     // add event by text started
 
     private void addTask() {
-        startActivity(new Intent(this, AddTask.class));
-    }
-
-    private void viewTask(EventDay eventDay) {
-        Intent intent = new Intent(this, ViewTask.class);
-        if(eventDay instanceof MyEventDay) {
-            intent.putExtra(EVENT, (MyEventDay) eventDay);
-            startActivity(intent);
-
-        } else {
-            Toast.makeText(this, "No Task assigned for this date", Toast.LENGTH_LONG).show();
-        }
+        startActivity(new Intent(this, AddTaskTxt.class));
     }
 
     // add event by text ended
@@ -317,15 +325,24 @@ public class Drawer extends AppCompatActivity
     // add event by speech started
 
     private void startVoiceInput() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hello, How can I help you?");
-        try {
-            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-
-        } catch (ActivityNotFoundException a) { }
+        startActivity(new Intent(this, AddTaskVoice.class));
     }
 
     // add event by speech ended
+
+    // on specific date selected code started
+
+    private void viewTask(EventDay eventDay) {
+        /*Intent intent = new Intent(this, ViewTask.class);
+        if(eventDay instanceof MyEventDay) {
+            intent.putExtra(EVENT, (MyEventDay) eventDay);
+            startActivity(intent);
+
+        } else {
+            Toast.makeText(this, "No Task assigned for this date", Toast.LENGTH_LONG).show();
+        }*/
+        startActivity(new Intent(this, ViewTask.class));
+    }
+
+    // on specific date selected code ended
 }

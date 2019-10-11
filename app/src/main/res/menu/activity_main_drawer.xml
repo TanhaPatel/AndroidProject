@@ -5,6 +5,14 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_addtask_txt"
+            android:icon="@drawable/ic_add_black_24dp"
+            android:title="Add Task by Text" />
+        <item
+            android:id="@+id/nav_addtask_voice"
+            android:icon="@drawable/ic_mic_black_24dp"
+            android:title="Add Task by Voice" />
+        <item
             android:id="@+id/nav_agenda"
             android:icon="@drawable/ic_view_list_black_24dp"
             android:title="Agenda" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,85 +11,107 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/logo_id"
-        android:layout_width="240dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center_horizontal"
-        android:padding="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="20dp"
-        app:srcCompat="@drawable/logo"/>
+        <ImageView
+            android:id="@+id/logo_id"
+            android:layout_width="240dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="20dp"
+            android:padding="16dp"
+            app:srcCompat="@drawable/logo" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/signupemailLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="#00ffff"
-            android:textColor="#ffffff">
+            android:textColor="#ffffff"
+            android:textColorHint="#00ffff">
 
             <EditText
                 android:id="@+id/signupemailEditTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:hint="Enter Email"
-                android:drawablePadding="12dp"
-                android:padding="8dp"
-                android:textColor="#ffffff"
-                android:inputType="textEmailAddress"
-                android:singleLine="true"
                 android:layout_marginTop="40dp"
-                android:drawableLeft="@drawable/ic_email_white_24dp"/>
+                android:drawablePadding="12dp"
+                android:hint="Enter Email"
+                android:inputType="textEmailAddress"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/signuppasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#ffffff"
             android:textColorHint="#00ffff"
-            android:textColor="#ffffff">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorWhite">
 
             <EditText
                 android:id="@+id/signuppasswordEditTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:hint="Enter Password"
-                android:drawablePadding="12dp"
-                android:padding="8dp"
-                android:textColor="#ffffff"
-                android:inputType="textEmailAddress"
-                android:singleLine="true"
                 android:layout_marginTop="40dp"
-                android:drawableLeft="@drawable/ic_lock_outline_white_24dp"/>
+                android:hint="Enter Password"
+                android:inputType="textWebPassword"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+
         </android.support.design.widget.TextInputLayout>
 
-        <CheckBox
-            android:id="@+id/signupshowpassword"
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/signupconfirmpasswordLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Show Password"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:textColorHint="#00ffff"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorWhite">
 
-    <Button
-        android:id="@+id/signupbtn1"
-        android:text="Sign Up"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="175dp"
-        android:layout_height="50dp"
-        android:background="@drawable/buttonshape"
-        android:shadowColor="#198BA8"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="5"
-        />
+            <EditText
+                android:id="@+id/signupconfirmpasswordEditTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:hint="Confirm Password"
+                android:inputType="textWebPassword"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/signupbtn1"
+            android:layout_width="175dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/loginnsignupbtn"
+            android:shadowColor="#198BA8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:text="Sign Up"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
     </LinearLayout>
 
-</ScrollView>
+</android.support.constraint.ConstraintLayout>

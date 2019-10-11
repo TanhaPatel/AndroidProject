@@ -18,25 +18,34 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.support.v4.content.ContextCompat.getSystemService;
+import static android.support.v4.content.ContextCompat.startActivities;
+
 public class MyBroadcastReceiver extends BroadcastReceiver {
 
     private static final int DAILY_REMINDER_REQUEST_CODE = 1;
     MediaPlayer mp;
+    TaskRetrieve userTasks;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
+        Intent i = new Intent();
+        i.setClassName("com.example.nav", "com.example.nav.Alarm");
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
         Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
         ringtone.play();
 
-        Toast.makeText(context, "Alarm...", Toast.LENGTH_LONG).show();
+        //userTasks.getTask();
+        //Toast.makeText(context, "Alarm...", Toast.LENGTH_LONG).show();
 
-        showNotification(context, MainActivity.class,
-                "Task Planner", "Time to complete task");
+        showNotification(context, Drawer.class, "Task Planner", "Time to complete task");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public static void showNotification(Context context, Class<?> cls, String title, String content) {
         int notificationId = 0;
 
@@ -62,7 +71,14 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(DAILY_REMINDER_REQUEST_CODE, notification);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "Your ID";
+            NotificationChannel channel = new NotificationChannel(channelId, "Channel",  NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId(channelId);
+        }
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_LOW;
             String channelId = "ID";
             NotificationChannel channel = new NotificationChannel(channelId, "Channel",  NotificationManager.IMPORTANCE_DEFAULT);
@@ -71,6 +87,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             channel.enableVibration(true);
             channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             notificationManager.createNotificationChannel(channel);
-        }
+        }*/
     }
 }

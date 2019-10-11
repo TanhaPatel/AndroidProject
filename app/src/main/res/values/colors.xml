@@ -7,4 +7,5 @@
     <color name="colorBlack">#000000</color>
     <color name="colorDivider">#aaaaaa</color>
     <color name="colorTodayDate">#F44336</color>
+    <color name="fab_pressed">#546e7a</color>
 </resources>

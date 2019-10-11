@@ -32,7 +32,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private EditText signupemailEditText;
     private EditText signuppasswordEditTxt;
     private Button signupbtn1;
-    private CheckBox signupshowpassword;
 
     private ProgressDialog progressDialog;
 
@@ -66,13 +65,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         signupemailEditText = (EditText) findViewById(R.id.signupemailEditTxt);
         signuppasswordEditTxt = (EditText) findViewById(R.id.signuppasswordEditTxt);
         signupbtn1 = (Button) findViewById(R.id.signupbtn1);
-        signupshowpassword = findViewById(R.id.signupshowpassword);
 
         progressDialog = new ProgressDialog(this);
 
         //attaching listener to button
         signupbtn1.setOnClickListener(this);
-        signupshowpassword.setOnClickListener(this);
 
     }
 
@@ -163,22 +160,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             });
     }
 
-    // show password code starts
-
-    private void showpassword() {
-        if(signupshowpassword.isChecked()) {
-            // show password
-            signuppasswordEditTxt.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            //Toast.makeText(MainActivity.this, "WordPress Checked", Toast.LENGTH_LONG).show();
-        } else {
-            // hide password
-            signuppasswordEditTxt.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            //Toast.makeText(MainActivity.this, "WordPress Un-Checked", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    // show password code ends
-
     // email verification code starts
 
     private void sendVerificationEmail() {
@@ -214,10 +195,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         if(v == signupbtn1){
             registerUser();
-        }
-
-        if (v == signupshowpassword) {
-            showpassword();
         }
     }
 }
