@@ -32,6 +32,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,7 +48,6 @@ public class ViewTask extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     TaskRetrieve userTasks;
     private String userid;
-    Ringtone ringTone;
     final static int RQS_1 = 1;
 
     @Override
@@ -80,7 +81,8 @@ public class ViewTask extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     userTasks = ds.getValue(TaskRetrieve.class);
                     list.add(userTasks.getTask());
-                    list.add(String.valueOf(userTasks.getDatentime()));
+                    list.add(String.valueOf(userTasks.getDate()));
+                    list.add(String.valueOf(userTasks.getTime()));
                     list.add("----------------------------------------------------------------");
                     alarm();
 
@@ -91,7 +93,7 @@ public class ViewTask extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Failed to read value
-                Toast.makeText(ViewTask.this, "Failed to retrive data", Toast.LENGTH_LONG).show();
+                Toast.makeText(ViewTask.this, "Failed to retrieve data", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -99,17 +101,40 @@ public class ViewTask extends AppCompatActivity {
     private void alarm() {
         Calendar current = Calendar.getInstance();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(userTasks.getDatentime());
 
-        if (cal.compareTo(current) < 0) {
+        Date c = new Date();
+        try {
+            c = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(userTasks.getDate() + userTasks.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cdt = Calendar.getInstance();
+        cdt.setTime(c);
+
+        /*Date currentDate = new Date();
+        Date currentTime = Calendar.getInstance().getTime();
+        String curDate = new SimpleDateFormat("dd-MMM-yyyy").format(currentDate);
+
+        if (userTasks.getDate().compareTo(curDate) < 0) {
+            if((userTasks.getTime().compareTo(currentTime.toString())) <= 0) {
+                list.remove(userTasks.getTask());
+                list.remove(String.valueOf(userTasks.getDate()));
+                list.remove(String.valueOf(userTasks.getTime()));
+                list.remove("----------------------------------------------------------------");
+            }
+        } else {
+            setAlarm(cdt);
+        }*/
+
+        if (cdt.compareTo(current) < 0) {
             //The set Date/Time already passed
-            //Toast.makeText(getApplicationContext(), "Task completed", Toast.LENGTH_LONG).show();
             list.remove(userTasks.getTask());
-            list.remove(String.valueOf(userTasks.getDatentime()));
+            list.remove(String.valueOf(userTasks.getDate()));
+            list.remove(String.valueOf(userTasks.getTime()));
             list.remove("----------------------------------------------------------------");
 
         } else {
-            setAlarm(cal);
+            //setAlarm(cdt);
         }
     }
 
@@ -118,12 +143,5 @@ public class ViewTask extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), RQS_1, intent, 0);
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
-        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-        Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), uri);
-        ringtone.play();
-        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-        if((targetCal.getTime()).equals(currentDateTimeString)){
-            ringTone = RingtoneManager.getRingtone(getApplicationContext(), uri);
-        }
     }
 }

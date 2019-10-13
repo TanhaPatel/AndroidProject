@@ -4,22 +4,15 @@ import java.util.Date;
 
 public class TaskSender {
 
-    String task;
-    Date datentime;
+    String task, date, time;
 
-    public TaskSender(){}
+    public TaskSender() {
+    }
 
-    public TaskSender(Date datentime, String task) {
-        this.datentime = datentime;
+    public TaskSender(String task, String date, String time) {
         this.task = task;
-    }
-
-    public Date getDatentime() {
-        return datentime;
-    }
-
-    public void setDatentime(Date datentime) {
-        this.datentime = datentime;
+        this.date = date;
+        this.time = time;
     }
 
     public String getTask() {
@@ -28,5 +21,21 @@ public class TaskSender {
 
     public void setTask(String task) {
         this.task = task;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

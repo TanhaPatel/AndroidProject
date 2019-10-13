@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Alarm extends AppCompatActivity {
 
@@ -21,23 +22,19 @@ public class Alarm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
-/*
 
-        cancelbtn.findViewById(R.id.cancelbtn);
-        snoozebtn.findViewById(R.id.snooozebtn);
-        task.findViewById(R.id.task);
-*/
+        cancelbtn = findViewById(R.id.cancelbtn);
+        snoozebtn = findViewById(R.id.snooozebtn);
+        task = findViewById(R.id.task);
 
-//        userTasks.getTask();
-
-        //task.setText(userTasks.getTask());
-        /*cancelbtn.setOnClickListener(new View.OnClickListener() {
+        cancelbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), MyBroadcastReceiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), RQS_1, intent, 0);
                 AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
                 alarmManager.cancel(pendingIntent);
+                finish();
             }
         });
 
@@ -47,8 +44,10 @@ public class Alarm extends AppCompatActivity {
                 Intent intent = new Intent(getBaseContext(), MyBroadcastReceiver.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), RQS_1, intent, 0);
                 AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 5000, 5*60*1000, pendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 0, 5*60*1000, pendingIntent);
+                Toast.makeText(Alarm.this, "Busy?? Will Ping You After 5 mins...", Toast.LENGTH_SHORT).show();
+                finish();
             }
-        });*/
+        });
     }
 }

@@ -24,10 +24,6 @@ import static android.support.v4.content.ContextCompat.startActivities;
 
 public class MyBroadcastReceiver extends BroadcastReceiver {
 
-    private static final int DAILY_REMINDER_REQUEST_CODE = 1;
-    MediaPlayer mp;
-    TaskRetrieve userTasks;
-
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -40,53 +36,36 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
         ringtone.play();
 
-        //userTasks.getTask();
-        //Toast.makeText(context, "Alarm...", Toast.LENGTH_LONG).show();
-
-        showNotification(context, Drawer.class, "Task Planner", "Time to complete task");
+        showNotification(context, "Task Planner", "Time to complete task", intent);
     }
 
-    public static void showNotification(Context context, Class<?> cls, String title, String content) {
-        int notificationId = 0;
+    public void showNotification(Context context, String title, String body, Intent intent) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        int notificationId = 1;
+        String channelId = "channel-01";
+        String channelName = "Channel Name";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        Intent notificationIntent = new Intent(context, cls);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(cls);
-        stackBuilder.addNextIntent(notificationIntent);
-
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(
-                DAILY_REMINDER_REQUEST_CODE, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        Notification notification = builder.setContentTitle(title)
-                .setContentText(content).setAutoCancel(true)
-                .setSound(alarmSound).setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentIntent(pendingIntent).build();
-
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(DAILY_REMINDER_REQUEST_CODE, notification);
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = "Your ID";
-            NotificationChannel channel = new NotificationChannel(channelId, "Channel",  NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-            builder.setChannelId(channelId);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(
+                    channelId, channelName, importance);
+            notificationManager.createNotificationChannel(mChannel);
         }
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            String channelId = "ID";
-            NotificationChannel channel = new NotificationChannel(channelId, "Channel",  NotificationManager.IMPORTANCE_DEFAULT);
-            channel.enableLights(true);
-            channel.setLightColor(Color.RED);
-            channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-            notificationManager.createNotificationChannel(channel);
-        }*/
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setSound(alarmSound);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        notificationManager.notify(notificationId, mBuilder.build());
     }
 }

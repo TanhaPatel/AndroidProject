@@ -33,7 +33,6 @@ public class AddTaskVoice extends AppCompatActivity {
     private TextView voiceInput;
     private ImageView addtaskmic;
     Button voicedate, voicetime;
-    String date, time;
 
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth firebaseAuth;
@@ -53,21 +52,7 @@ public class AddTaskVoice extends AppCompatActivity {
 
         voiceInput = findViewById(R.id.voiceInput);
         addtaskmic = findViewById(R.id.addtaskmic);
-        voicedate = findViewById(R.id.voicedate);
-        voicetime = findViewById(R.id.voicetime);
         addtaskmic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startVoiceInput();
-            }
-        });
-        voicedate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startVoiceInput();
-            }
-        });
-        voicetime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startVoiceInput();
@@ -81,7 +66,7 @@ public class AddTaskVoice extends AppCompatActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Listening...");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Use format \'Task\' at \'Date\' on \'Time\'");
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
@@ -95,6 +80,7 @@ public class AddTaskVoice extends AppCompatActivity {
             { if (resultCode == RESULT_OK && null != data)
             { ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 voiceInput.setText(result.get(0));
+                setalarm();
             }
                 break; }
         }
@@ -114,14 +100,11 @@ public class AddTaskVoice extends AppCompatActivity {
         if (TextUtils.isEmpty(user_task)) {
             Toast.makeText(this, "Please Enter Valid Input", Toast.LENGTH_LONG).show();
 
-        } else if(datentime.compareTo(currenttime) <= 0) {
-            Toast.makeText(this, "Invalid input", Toast.LENGTH_SHORT).show();
-
         } else {
-            String id = databaseReference.push().getKey();
+            /*String id = databaseReference.push().getKey();
             TaskSender ts = new TaskSender(datentime, user_task);
             voiceInput.setText("");
-            databaseReference.child(email).child(id).setValue(ts);
+            databaseReference.child(email).child(id).setValue(ts);*/
             Toast.makeText(this, "Task added successfully", Toast.LENGTH_LONG).show();
 
         }
